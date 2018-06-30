@@ -3,19 +3,33 @@
 let Reporter = require('./base-notifier');
 const fetch = require('node-fetch');
 
-module.exports = class DateReporter extends Reporter {
-  getData(url) {
-    return fetch('https://github.com/')
-      .then(res => res.text())
-      .then(body => console.log(body));
+module.exports = class GithubReporter extends Reporter {
+
+  constructor() {
+    super('GITHUB');
   }
 
-  checkForNotifications(context, [target, org, repo, number, state = 'RESOLVED']) {
+  getData(url) {
+    return fetch(url)
+      .then(res => res.json());
+  }
+
+  proccessIssue(response, notifyState, context) {
+    const { state } = response;
+    console.log(state);
+    if (state === notifyState) {
+      context.report({
+        message: `Github issue is now ${state}, this can now be reviewed`,
+      });
+    }
+  }
+
+  checkForNotifications(context, [target, org, repo, number, state = 'resolved']) {
     if (target !== 'ISSUE') {
       throw `${target} is not currently supported. Only issues are currently supported`;
     }
-    const url = `api.github.com/${org}/${repo}/${number}`;
-    const result = this.getData(url);
+    const url = `https://api.github.com/repos/${org}/${repo}/issues/${number}`;
+    this.getData(url).then(resp => this.proccessIssue(resp, state, context));
     // const {state: responseState} = result;
     // if (responseState === state) {
     //     context.report({

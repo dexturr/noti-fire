@@ -9,5 +9,4 @@ module.exports = class Context {
   report(error) {
     this.errors.push(error);
   }
-}
-;
+};
