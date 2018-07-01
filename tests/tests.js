@@ -33,13 +33,13 @@ describe('NotiFire - Acceptance tests', () => {
     // this is a second comment
     // noti-fire GITHUB ISSUE nodejs node 123
 `;
-    const githubNotifier = new GithubNotifier();
+    const fakeFecth = () => ({ json: () => ({ state: 'closed' }) });
+    const githubNotifier = new GithubNotifier(fakeFecth);
     const context = new Context();
     const factory = new NotificationFactory([githubNotifier]);
     const notiFire = new NotiFire(code, factory, context);
 
     notiFire.processComments().then(() => {
-      console.log('hi - 32');
       assert.ok(context.errors.length);
       done();
     });
