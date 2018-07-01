@@ -18,7 +18,6 @@ module.exports = class NotiFire {
     }
 
     this.context = context;
-    this.providers = factory.implementations.map(i => i.type);
     this.factory = factory;
     this.ast = espree.parse(code, {
       // create a top-level comments array containing all comments
@@ -38,13 +37,12 @@ module.exports = class NotiFire {
     return this.comments.filter(comment => comment.startsWith('noti-fire'));
   }
 
-  processComments() {
+  // TODO DO NOT DO THESE IN SEQUENC£
+  async processComments() {
     for (const comment of this.notiFireComments) {
       const [, type, ...commentArguments] = comment.split(' ');
-      for (const provider of this.providers) {
-        const notificationProvider = this.factory.getImplementation(provider);
-        notificationProvider.checkForNotifications(this.context, commentArguments);
-      }
+      const notificationProvider = this.factory.getImplementation(type);
+      await notificationProvider.checkForNotifications(this.context, commentArguments);
     }
   }
 };

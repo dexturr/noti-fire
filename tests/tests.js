@@ -8,6 +8,7 @@ let GithubNotifier = require('../notifiers/github-notifier');
 let assert = require('assert');
 
 describe('NotiFire - Acceptance tests', () => {
+
   it('Date notifier reports if the date is in the past', () => {
     const code = `
     var test = 123;
@@ -25,20 +26,22 @@ describe('NotiFire - Acceptance tests', () => {
     assert.ok(context.errors.length);
   });
 
-  it('Gitub notifier reports if the date is in the past', () => {
+  it('Gitub notifier reports if the date is in the past', done => {
     const code = `
     var test = 123;
     // this is a text comment
     // this is a second comment
-    // noti-fire GITHUB ISSUE nodejs node 21602 
+    // noti-fire GITHUB ISSUE nodejs node 123
 `;
     const githubNotifier = new GithubNotifier();
     const context = new Context();
     const factory = new NotificationFactory([githubNotifier]);
     const notiFire = new NotiFire(code, factory, context);
 
-    notiFire.processComments();
-
-    assert.ok(context.errors.length);
+    notiFire.processComments().then(() => {
+      console.log('hi - 32');
+      assert.ok(context.errors.length);
+      done();
+    });
   });
 });
