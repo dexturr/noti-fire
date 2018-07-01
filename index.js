@@ -42,6 +42,9 @@ module.exports = class NotiFire {
     for (const comment of this.notiFireComments) {
       const [, type, ...commentArguments] = comment.split(' ');
       const notificationProvider = this.factory.getImplementation(type);
+      if (!notificationProvider) {
+        throw new Error(`Could not find notifier ${type}`);
+      }
       await notificationProvider.checkForNotifications(this.context, commentArguments);
     }
   }
