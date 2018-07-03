@@ -1,11 +1,13 @@
 'use strict';
 
-let NotiFire = require('../index');
-let NotificationFactory = require('../notification-factory');
-let Context = require('../context');
-let DateNotifier = require('../notifiers/date-notifier');
-let GithubNotifier = require('../notifiers/github-notifier');
+let NotiFire = require('../lib/index');
+let NotificationFactory = require('../lib/notification-factory');
+let Context = require('../lib/context');
+let DateNotifier = require('../lib/notifiers/date-notifier');
+let GithubNotifier = require('../lib/notifiers/github-notifier');
+let JiraNotifier = require('../lib/notifiers/jira-notifier');
 let assert = require('assert');
+let fetch = require('node-fetch');
 
 describe('NotiFire - Acceptance tests', () => {
 
@@ -68,7 +70,7 @@ describe('NotiFire - Acceptance tests', () => {
     // this is a second comment
     // noti-fire GITHUB ISSUE nodejs node 123
 `;
-    const fakeFecth = () => ({ json: () => ({ state: 'closed' }) });
+    const fakeFecth = () => ({ state: 'closed' });
     const githubNotifier = new GithubNotifier(fakeFecth);
     const context = new Context();
     const factory = new NotificationFactory([githubNotifier]);
@@ -87,7 +89,7 @@ describe('NotiFire - Acceptance tests', () => {
     // this is a second comment
     // noti-fire GITHUB ISSUE nodejs node 123
 `;
-    const fakeFecth = () => ({ json: () => ({ state: 'open' }) });
+    const fakeFecth = () => ({ state: 'open' });
     const githubNotifier = new GithubNotifier(fakeFecth);
     const context = new Context();
     const factory = new NotificationFactory([githubNotifier]);
@@ -106,13 +108,53 @@ describe('NotiFire - Acceptance tests', () => {
     // this is a second comment
     // noti-fire GITHUB PR nodejs node 123
 `;
-    const fakeFecth = () => ({ json: () => ({ state: 'open' }) });
+    const fakeFecth = () => ({ state: 'open' });
     const githubNotifier = new GithubNotifier(fakeFecth);
     const context = new Context();
     const factory = new NotificationFactory([githubNotifier]);
     const notiFire = new NotiFire(code, factory, context);
 
     notiFire.processComments().catch(() => {
+      assert.ok(true);
+      done();
+    });
+  });
+
+  it('Jira notifier reports if the issue is Resolved', done => {
+    const code = `
+    var test = 123;
+    // this is a text comment
+    // this is a second comment
+    // noti-fire JIRA JRACLOUD-68988
+`;
+    const url = 'https://jira.atlassian.com/rest/api/2/issue';
+    const githubNotifier = new JiraNotifier(fetch, url);
+    const context = new Context();
+    const factory = new NotificationFactory([githubNotifier]);
+    const notiFire = new NotiFire(code, factory, context);
+
+    notiFire.processComments().then(() => {
+      assert.ok(true);
+      done();
+    }).catch(function() {
+      console.log(arguments);
+    });
+  });
+
+  it('Jira notifier reports if the issue is at the status passed in', done => {
+    const code = `
+    var test = 123;
+    // this is a text comment
+    // this is a second comment
+    // noti-fire JIRA JRACLOUD-69747 Open
+`;
+    const url = 'https://jira.atlassian.com/rest/api/2/issue';
+    const githubNotifier = new JiraNotifier(fetch, url);
+    const context = new Context();
+    const factory = new NotificationFactory([githubNotifier]);
+    const notiFire = new NotiFire(code, factory, context);
+
+    notiFire.processComments().then(() => {
       assert.ok(true);
       done();
     });
