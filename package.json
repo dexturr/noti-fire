@@ -1,13 +1,21 @@
 {
   "name": "noti-fire",
   "version": "0.0.1",
-  "description": "Allows comments to notify at build time that code needs to be checked",
+  "description": "A simple library for managing technical debt",
   "bin": "bin/index.js",
   "dependencies": {
     "espree": "^4.0.0",
     "chalk": "^2.4.1",
     "node-fetch": "^2.1.2",
     "glob": "^7.1.2"
+  },
+  "homepage": "https://github.com/dexturr/noti-fire",
+  "bugs": {
+    "url": "https://github.com/dexturr/noti-fire/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dexturr/noti-fire.git"
   },
   "devDependencies": {
     "eslint": "^5.0.1",
