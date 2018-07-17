@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "espree": "^4.0.0",
+    "chalk": "^2.4.1",
     "node-fetch": "^2.1.2",
     "glob": "^7.1.2"
   },

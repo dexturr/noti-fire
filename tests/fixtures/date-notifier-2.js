@@ -1,5 +1,5 @@
 'use strict';
 
-// noti-fire GITHUB ISSUE ORG REPO 1
+// noti-fire DATE 11/08/1994
 
 module.exports = Math.E;

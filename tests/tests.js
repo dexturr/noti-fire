@@ -7,27 +7,33 @@ let DateNotifier = require('../lib/notifiers/date-notifier');
 let GithubNotifier = require('../lib/notifiers/github-notifier');
 let JiraNotifier = require('../lib/notifiers/jira-notifier');
 let assert = require('assert');
-let fetch = require('node-fetch');
 
 let NotifierCli = require('../lib/notifier-cli');
 let path = require('path');
 
 describe('NotiFire CLI - Acceptance tests', () => {
-  it('does the thing', done => {
+  it('it logs out errors when passed a file', done => {
+    let array = [];   
     const filePath = path.resolve(__dirname, './fixtures/date-notifier.js');
     const configFilePath = path.resolve(__dirname, './fixtures/.notifirerc.js');
-    const notfierCli = new NotifierCli([filePath], { configFilePath });
-    notfierCli.processFiles().then(() => {
+    const log = message => array.push(message);        
+    const notfierCli = new NotifierCli([filePath], { configFilePath, log });
+    notfierCli.processFiles().then(result => {
+      assert.equal(result, 1);
+      assert.equal(array.length, 1);      
       done();
     });
   });
 
-  it('does the thing with a directory', done => {
-    const fakeFecth = () => ({ state: 'closed' });    
+  it('it logs out errors when passed a directory', done => {
+    let array = [];
     const filePath = path.resolve(__dirname, './fixtures');
     const configFilePath = path.resolve(__dirname, './fixtures/.notifirerc.js');
-    const notfierCli = new NotifierCli([filePath], { configFilePath, fetch: fakeFecth });
-    notfierCli.processFiles().then(() => {
+    const log = message => array.push(message);
+    const notfierCli = new NotifierCli([filePath], { configFilePath, log });
+    notfierCli.processFiles().then(result => {
+      assert.equal(result, 1);
+      assert.equal(array.length, 2);
       done();
     });
   });
@@ -150,14 +156,15 @@ describe('NotiFire - Acceptance tests', () => {
     // this is a second comment
     // noti-fire JIRA JRACLOUD-68988
 `;
-    const url = 'https://jira.atlassian.com/';
-    const githubNotifier = new JiraNotifier(fetch, url);
+    const fakeFecth = () => ({ fields: { status: { name: 'Resolved' } } });
+    const config = { JIRA: { baseUrl: 'https://jira.atlassian.com' } };
+    const githubNotifier = new JiraNotifier(fakeFecth, config);
     const context = new Context();
     const factory = new NotificationFactory([githubNotifier]);
     const notiFire = new NotiFire(code, factory, context);
 
     notiFire.processComments().then(() => {
-      assert.ok(true);
+      assert.ok(context.errors.length > 0);
       done();
     });
   });
@@ -169,14 +176,15 @@ describe('NotiFire - Acceptance tests', () => {
     // this is a second comment
     // noti-fire JIRA JRACLOUD-69747 Open
 `;
-    const url = 'https://jira.atlassian.com/';
-    const githubNotifier = new JiraNotifier(fetch, url);
+    const fakeFecth = () => ({ fields: { status: { name: 'Open' } } });
+    const config = { JIRA: { baseUrl: 'https://jira.atlassian.com' } };
+    const githubNotifier = new JiraNotifier(fakeFecth, config);
     const context = new Context();
     const factory = new NotificationFactory([githubNotifier]);
     const notiFire = new NotiFire(code, factory, context);
 
     notiFire.processComments().then(() => {
-      assert.ok(true);
+      assert.ok(context.errors.length > 0);
       done();
     });
   });
