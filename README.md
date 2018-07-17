@@ -63,7 +63,7 @@ Review this code when a specific Github issue is resolved:
 
 ```js
 
-// Needs reviewing
+// Once [FEATURE] lands we won't need this anymore
 // noti-fire GITHUB ISSUE [ORG] [REPO] [NUMBER]
 const hackyFunction = function() {
     // Some terrible code here
@@ -80,7 +80,7 @@ Review this code when a specific Jira issue is at a given state:
 
 ```js
 
-// Needs reviewing
+// Once the middleware team implement [FEATURE] we won't need this
 // noti-fire JIRA [NUMBER] [STATUS]
 const hackyFunction = function() {
     // Some terrible code here

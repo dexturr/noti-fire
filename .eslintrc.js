@@ -70,6 +70,7 @@ module.exports = {
         'SwitchCase': 1,
         'VariableDeclarator': { 'var': 2, 'let': 2, 'const': 3 }
       }],
+      'require-await': 2,
       'key-spacing': 2,
       'keyword-spacing': 2,
       'new-cap': [2, {

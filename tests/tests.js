@@ -9,8 +9,31 @@ let JiraNotifier = require('../lib/notifiers/jira-notifier');
 let assert = require('assert');
 let fetch = require('node-fetch');
 
-describe('NotiFire - Acceptance tests', () => {
+let NotifierCli = require('../lib/notifier-cli');
+let path = require('path');
 
+describe('NotiFire CLI - Acceptance tests', () => {
+  it('does the thing', done => {
+    const filePath = path.resolve(__dirname, './fixtures/date-notifier.js');
+    const configFilePath = path.resolve(__dirname, './fixtures/.notifirerc.js');
+    const notfierCli = new NotifierCli([filePath], { configFilePath });
+    notfierCli.processFiles().then(() => {
+      done();
+    });
+  });
+
+  it('does the thing with a directory', done => {
+    const fakeFecth = () => ({ state: 'closed' });    
+    const filePath = path.resolve(__dirname, './fixtures');
+    const configFilePath = path.resolve(__dirname, './fixtures/.notifirerc.js');
+    const notfierCli = new NotifierCli([filePath], { configFilePath, fetch: fakeFecth });
+    notfierCli.processFiles().then(() => {
+      done();
+    });
+  });
+});
+
+describe('NotiFire - Acceptance tests', () => {
 
   it('Notifier error if notifier name does not exist', () => {
     const code = `
@@ -127,7 +150,7 @@ describe('NotiFire - Acceptance tests', () => {
     // this is a second comment
     // noti-fire JIRA JRACLOUD-68988
 `;
-    const url = 'https://jira.atlassian.com/rest/api/2/issue';
+    const url = 'https://jira.atlassian.com/';
     const githubNotifier = new JiraNotifier(fetch, url);
     const context = new Context();
     const factory = new NotificationFactory([githubNotifier]);
@@ -136,8 +159,6 @@ describe('NotiFire - Acceptance tests', () => {
     notiFire.processComments().then(() => {
       assert.ok(true);
       done();
-    }).catch(function() {
-      console.log(arguments);
     });
   });
 
@@ -148,7 +169,7 @@ describe('NotiFire - Acceptance tests', () => {
     // this is a second comment
     // noti-fire JIRA JRACLOUD-69747 Open
 `;
-    const url = 'https://jira.atlassian.com/rest/api/2/issue';
+    const url = 'https://jira.atlassian.com/';
     const githubNotifier = new JiraNotifier(fetch, url);
     const context = new Context();
     const factory = new NotificationFactory([githubNotifier]);
