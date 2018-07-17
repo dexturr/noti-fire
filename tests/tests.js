@@ -13,14 +13,14 @@ let path = require('path');
 
 describe('NotiFire CLI - Acceptance tests', () => {
   it('it logs out errors when passed a file', done => {
-    let array = [];   
+    let array = [];
     const filePath = path.resolve(__dirname, './fixtures/date-notifier.js');
     const configFilePath = path.resolve(__dirname, './fixtures/.notifirerc.js');
-    const log = message => array.push(message);        
+    const log = message => array.push(message);
     const notfierCli = new NotifierCli([filePath], { configFilePath, log });
     notfierCli.processFiles().then(result => {
       assert.equal(result, 1);
-      assert.equal(array.length, 1);      
+      assert.equal(array.length, 1);
       done();
     });
   });

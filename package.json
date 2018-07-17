@@ -2,7 +2,7 @@
   "name": "noti-fire",
   "version": "0.0.1",
   "description": "Allows comments to notify at build time that code needs to be checked",
-  "main": "lib/index.js",
+  "bin": "bin/index.js",
   "dependencies": {
     "espree": "^4.0.0",
     "chalk": "^2.4.1",

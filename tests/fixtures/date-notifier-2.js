@@ -1,5 +1,5 @@
 'use strict';
 
-// noti-fire DATE 11/08/1994
+// noti-fire DATE 12/04/1996
 
 module.exports = Math.E;
