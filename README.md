@@ -1,6 +1,6 @@
 # Notifire
 
-A simple notification library for code quality. 
+A simple notification library for managing technical debt.
 
 ## The cheesey sales pitch
 
@@ -27,11 +27,11 @@ library.function();
 
 Ever been told 'we will look into fixing it later' and then never got round to it?
 
-Then you need Notifire!
+Then you need Noti-fire!
 
 ## Functionality
 
-Notifire provides a simple interface that processes comments and fires notifications once the conditions are met (see what I did there?). Notifier can then be run during a build and will fail if there are any resolveable issues within your code. A Notifier notification is configured using comments:
+Notifire provides a simple interface that processes comments and fires notifications once the conditions are met (see what I did there?). Noti-fire can then be run during a build and will fail if there are any resolveable issues within your code. A Noti-fire notification is configured using comments:
 
 ```js
 
@@ -39,7 +39,7 @@ Notifire provides a simple interface that processes comments and fires notificat
 
 ```
 
-Noti-fire then scans all code files for these notification, checks to see weather any of the conditions have been met and fails if this is the case. There are currently 3 build in notifires:
+Noti-fire then scans all code files for these notification, checks to see weather any of the conditions have been met to resolve this issue and fails if this is the case. There are currently 3 build in notifires:
 
 ### Date
 
