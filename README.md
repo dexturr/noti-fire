@@ -1,4 +1,4 @@
-# Notifire
+# Noti-fire
 
 A simple notification library for managing technical debt.
 
