@@ -1,5 +1,5 @@
 {
-  "name": "noti-fire",
+  "name": "noti-fire-js",
   "version": "0.0.1",
   "description": "A simple notification library for managing technical debt",
   "bin": "bin/index.js",
